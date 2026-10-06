@@ -5,7 +5,7 @@ import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { promisify } from 'node:util'
 import { test, type TestContext } from 'node:test'
-import { getERecht24Document } from '../dist/runtime/server/erecht24.js'
+import { getERecht24Document } from '@pirabyte/erecht24-nuxt/server'
 
 const execute = promisify(execFile)
 
@@ -89,6 +89,22 @@ test('uses disk without credentials, and returns null if there is no usable file
   assert.equal(await getERecht24Document(config, 'imprint', 'de'), '<p>Saved</p>')
   await writeFile(file, '{broken')
   assert.equal(await getERecht24Document(config, 'imprint', 'de'), null)
+  assert.equal(fetch.mock.callCount(), 0)
+})
+
+test('rejects invalid document names and languages before fetching or writing files', async (t) => {
+  const config = await setup(t)
+  const fetch = t.mock.method(globalThis, 'fetch', async () => { throw new Error('Must not fetch') })
+  for (const [document, language] of [
+    ['../../outside', 'de'],
+    ['imprint', '../../outside'],
+    ['clients', 'de'],
+    ['imprint', 'fr']
+  ]) {
+    // JavaScript consumers can bypass the TypeScript union types.
+    await assert.rejects(getERecht24Document(config, document as 'imprint', language as 'de'), TypeError)
+  }
+  assert.deepEqual(await readdir(config.cacheDir), [])
   assert.equal(fetch.mock.callCount(), 0)
 })
 
