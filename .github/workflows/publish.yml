@@ -67,6 +67,10 @@ jobs:
         run: npm run test:package
         env:
           ERECHT24_PACKAGE_TARBALL: ${{ github.workspace }}/release/${{ steps.package.outputs.tarball }}
+      - name: Validate publish command
+        env:
+          RELEASE_TARBALL: ${{ steps.package.outputs.tarball }}
+        run: npm publish "./release/$RELEASE_TARBALL" --dry-run --ignore-scripts --access public --registry=https://registry.npmjs.org
       - name: Install Nuxt 3 for compatibility check
         run: npm install --no-save --ignore-scripts nuxt@3
       - name: Test Nuxt 3 integration
@@ -116,4 +120,4 @@ jobs:
       - name: Publish with npm trusted publishing
         env:
           RELEASE_TARBALL: ${{ needs.build.outputs.tarball }}
-        run: npm publish "release/$RELEASE_TARBALL" --ignore-scripts --access public --registry=https://registry.npmjs.org
+        run: npm publish "./release/$RELEASE_TARBALL" --ignore-scripts --access public --registry=https://registry.npmjs.org
