@@ -1,6 +1,6 @@
 # eRecht24 for Nuxt
 
-This is an independent third-party project maintained by Pirabyte. It is not an official eRecht24 product and is not developed, maintained, or endorsed by eRecht24. eRecht24 is a trademark of its respective owner.
+This is an independent third-party project maintained by pirabyte. It is not an official eRecht24 product and is not developed, maintained, or endorsed by eRecht24. eRecht24 is a trademark of its respective owner.
 
 Server-side eRecht24 integration for Nuxt 3 and 4. Provides German and English imprint and privacy policy HTML through `/api/legal/imprint` and `/api/legal/privacyPolicy`.
 

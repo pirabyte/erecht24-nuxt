@@ -1,7 +1,7 @@
 {
   "name": "@pirabyte/erecht24-nuxt",
-  "version": "0.2.0",
-  "description": "Server-side eRecht24 legal documents for Nuxt with persistent fallback caching",
+  "version": "0.2.1",
+  "description": "eRecht24 legal documents for Nuxt and Node.js with persistent fallback caching",
   "type": "module",
   "license": "MIT",
   "publishConfig": {
@@ -64,5 +64,19 @@
     "nuxt": "^4.4.6",
     "typescript": "^5.9.3",
     "nitropack": "^2.12.0"
-  }
+  },
+  "keywords": [
+    "erecht24",
+    "rechtstexte",
+    "nuxt",
+    "nuxt-module",
+    "nextjs",
+    "nodejs",
+    "impressum",
+    "imprint",
+    "datenschutz",
+    "privacy-policy",
+    "gdpr",
+    "dsgvo"
+  ]
 }
