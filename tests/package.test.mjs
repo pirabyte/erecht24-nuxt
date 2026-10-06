@@ -11,8 +11,17 @@ const execute = promisify(execFile)
 test('published server entrypoint works without Nuxt or package install scripts', async (t) => {
   const directory = await mkdtemp(join(tmpdir(), 'erecht24-package-'))
   t.after(() => rm(directory, { recursive: true, force: true }))
-  const packed = await execute('npm', ['pack', '--json', '--pack-destination', directory])
+  const source = process.env.ERECHT24_PACKAGE_TARBALL
+    ? ['--ignore-scripts', process.env.ERECHT24_PACKAGE_TARBALL]
+    : []
+  const packed = await execute('npm', ['pack', '--json', '--pack-destination', directory, ...source])
   const [artifact] = JSON.parse(packed.stdout)
+  if (process.env.ERECHT24_PACKAGE_TARBALL) {
+    assert.deepEqual(
+      await readFile(join(directory, artifact.filename)),
+      await readFile(process.env.ERECHT24_PACKAGE_TARBALL)
+    )
+  }
   for (const file of artifact.files) {
     assert.ok(file.path.startsWith('dist/') || ['package.json', 'README.md', 'LICENSE'].includes(file.path), file.path)
   }

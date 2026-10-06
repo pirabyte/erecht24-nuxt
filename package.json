@@ -4,6 +4,9 @@
   "description": "Server-side eRecht24 legal documents for Nuxt with persistent fallback caching",
   "type": "module",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/pirabyte/erecht24-nuxt.git"
