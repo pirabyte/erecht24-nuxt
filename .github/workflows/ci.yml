@@ -2,13 +2,15 @@ name: CI
 on:
   push:
     branches: [main]
+  pull_request:
+    branches: [main]
 
 permissions:
   contents: read
 
 jobs:
   test:
-    if: github.repository == 'pirabyte/erecht24-nuxt' && github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: github.repository == 'pirabyte/erecht24-nuxt' && (github.event_name == 'pull_request' || (github.event_name == 'push' && github.ref == 'refs/heads/main'))
     runs-on: ubuntu-latest
     timeout-minutes: 15
     strategy:
