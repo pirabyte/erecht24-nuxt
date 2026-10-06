@@ -1,0 +1,52 @@
+{
+  "name": "@pirabyte/erecht24-nuxt",
+  "version": "0.1.0",
+  "description": "Server-side eRecht24 legal documents for Nuxt with persistent fallback caching",
+  "type": "module",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pirabyte/erecht24-nuxt.git"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/module.d.ts",
+      "import": "./dist/module.js"
+    }
+  },
+  "main": "./dist/module.js",
+  "types": "./dist/module.d.ts",
+  "engines": {
+    "node": ">=22.18.0"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "npm run build && node --test tests/*.test.ts",
+    "test:integration": "nuxt build tests/fixtures/app && node --test tests/integration.test.mjs",
+    "prepack": "npm run build",
+    "prepare": "npm run build"
+  },
+  "dependencies": {
+    "@nuxt/kit": "^3.17.5",
+    "h3": "^1.15.4",
+    "proper-lockfile": "^4.1.2",
+    "sanitize-html": "^2.17.7"
+  },
+  "peerDependencies": {
+    "nuxt": "^3.17.5 || ^4.0.0",
+    "nitropack": "^2.12.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.18.0",
+    "@types/proper-lockfile": "^4.1.4",
+    "@types/sanitize-html": "^2.16.1",
+    "nuxt": "^4.4.6",
+    "typescript": "^5.9.3",
+    "nitropack": "^2.12.0"
+  }
+}
