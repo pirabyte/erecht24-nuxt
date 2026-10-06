@@ -1,5 +1,7 @@
 # eRecht24 for Nuxt
 
+This is an independent third-party project maintained by Pirabyte. It is not an official eRecht24 product and is not developed, maintained, or endorsed by eRecht24. eRecht24 is a trademark of its respective owner.
+
 Server-side eRecht24 integration for Nuxt 3 and 4. Provides German and English imprint and privacy policy HTML through `/api/legal/imprint` and `/api/legal/privacyPolicy`.
 
 Extracted from the Lornlight website integration. API keys stay on the server. HTML is sanitized before serving and persisted on disk so the last successful document remains available during API failures and across process restarts.
