@@ -4,3 +4,4 @@ reviews:
     enabled: false
 chat:
   auto_reply: false
+  allow_non_org_members: false
