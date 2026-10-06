@@ -8,10 +8,8 @@ Extracted from the Lornlight website integration. API keys stay on the server. H
 
 ## Installation
 
-The package is not published on npm yet. Install from GitHub:
-
 ```sh
-npm install github:pirabyte/erecht24-nuxt
+npm install @pirabyte/erecht24-nuxt
 ```
 
 Requires Node.js 22.18 or newer and a Node server with a writable, persistent cache directory. Static-only hosting and edge runtimes are not supported.
@@ -30,7 +28,7 @@ NUXT_ERECHT24_API_KEY=your-project-api-key
 NUXT_ERECHT24_CACHE_DIR=/path/to/persistent/erecht24
 ```
 
-The plugin key is fixed in the package. Customers only supply their project API key. The official plugin key is pending; the source currently contains the existing eRecht24 demo plugin key. Once issued, the official key will replace it in the repository. Each website needs its own project API key and cache directory. No website credentials are included in this repository.
+The verified developer key issued by eRecht24 is included in the package as its public plugin identifier. Customers only supply their private project API key. Each website needs its own project API key and cache directory. No website credentials are included in this repository.
 
 The local cache defaults to `.data/erecht24`. Production should use a directory outside the deployment folder. A built Nuxt server does not automatically load `.env`; provide the variables through the process environment or Node's `--env-file` option.
 
@@ -62,13 +60,32 @@ Without an API key, the module only reads existing files. Cache files never expi
 
 Requests to eRecht24 send project and plugin keys, without forwarding visitor headers, cookies, or IP addresses. The endpoint uses `Cache-Control: no-store`; ensure legal pages are not separately prerendered or cached if they must reflect refreshed documents.
 
+## Other Node frameworks
+
+The server entrypoint provides the same sanitization and persistent cache to frameworks such as Next.js, without installing Nuxt. Import it only in server code running on Node.js:
+
+```ts
+import { getERecht24Document } from '@pirabyte/erecht24-nuxt/server'
+
+const html = await getERecht24Document(
+  { apiKey: process.env.ERECHT24_API_KEY ?? '', cacheDir: '.data/erecht24' },
+  'imprint',
+  'de'
+)
+```
+
+It returns sanitized HTML or `null` when neither upstream nor cache provides a usable document. Invalid document names or languages throw a `TypeError` before accessing storage or the API. `Config`, `DocumentType`, and `Language` are exported types. Use a persistent cache directory and handle `null` as an unavailable document in your framework.
+
+Only `sanitize-html` and `proper-lockfile` are runtime dependencies. Nuxt, Nitro, `@nuxt/kit`, and `h3` are optional peers supplied by a Nuxt application's existing framework installation. The package does not register push callbacks.
+
 ## Development
 
 ```sh
 npm ci
 npm test
 npm run test:integration
+npm run test:package
 npm pack --dry-run
 ```
 
-The unit tests cover sanitization, language separation, disk persistence, upstream failures, retry limits, and concurrent processes. The integration test builds a Nuxt fixture and checks API responses and server-rendered legal content. CI runs that fixture on Nuxt 3 and 4. Tests use synthetic documents and do not call the live eRecht24 API.
+The unit tests cover sanitization, language separation, disk persistence, upstream failures, retry limits, and concurrent processes. The integration test builds a Nuxt fixture and checks API responses and server-rendered legal content. CI runs that fixture on Nuxt 3 and 4. The package test installs the actual tarball in an isolated Node project and checks the server entrypoint without Nuxt or install scripts. Tests use synthetic documents and do not call the live eRecht24 API.

@@ -19,8 +19,8 @@ type CachedDocument = {
 
 const CACHE_TTL = 48 * 60 * 60 * 1000
 const RETRY_DELAY = 5 * 60 * 1000
-// Replace the demo key with the official package key once issued.
-const ERECHT24_PLUGIN_KEY = '3jh4uhn8u69i97kj9timk466748996ikhkjhlk67plli08lhkijgh8z4363gr53v'
+// Public plugin identifier issued by eRecht24; project API keys remain private.
+const ERECHT24_PLUGIN_KEY = 'vRuG4GQHxYb9MkxU3HURJTyDUHyDyE3scTV4vzzR8VPHbwyT3krWzM6vS4vmeqfm'
 const retryAfter = new Map<string, number>()
 
 function cleanHtml(html: string): string {
@@ -77,6 +77,11 @@ export async function getERecht24Document(
   type: DocumentType,
   language: Language
 ): Promise<string | null> {
+  if ((type !== 'imprint' && type !== 'privacyPolicy')
+    || (language !== 'de' && language !== 'en')) {
+    throw new TypeError('Invalid legal document or language')
+  }
+
   const directory = resolve(config.cacheDir)
   const file = join(directory, `${type}-${language}.json`)
   let cached = await readDocument(file)

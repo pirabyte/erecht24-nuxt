@@ -1,6 +1,6 @@
 {
   "name": "@pirabyte/erecht24-nuxt",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Server-side eRecht24 legal documents for Nuxt with persistent fallback caching",
   "type": "module",
   "license": "MIT",
@@ -17,6 +17,10 @@
     ".": {
       "types": "./dist/module.d.ts",
       "import": "./dist/module.js"
+    },
+    "./server": {
+      "types": "./dist/runtime/server/erecht24.d.ts",
+      "import": "./dist/runtime/server/erecht24.js"
     }
   },
   "main": "./dist/module.js",
@@ -28,23 +32,32 @@
     "build": "tsc -p tsconfig.json",
     "test": "npm run build && node --test tests/*.test.ts",
     "test:integration": "nuxt build tests/fixtures/app && node --test tests/integration.test.mjs",
+    "test:package": "node --test tests/package.test.mjs",
     "prepack": "npm run build",
     "prepare": "npm run build"
   },
   "dependencies": {
-    "@nuxt/kit": "^3.17.5",
-    "h3": "^1.15.4",
-    "proper-lockfile": "^4.1.2",
-    "sanitize-html": "^2.17.7"
+    "proper-lockfile": "4.1.2",
+    "sanitize-html": "2.18.0"
   },
   "peerDependencies": {
+    "@nuxt/kit": "^3.17.5 || ^4.0.0",
+    "h3": "^1.15.4",
     "nuxt": "^3.17.5 || ^4.0.0",
     "nitropack": "^2.12.0"
   },
+  "peerDependenciesMeta": {
+    "@nuxt/kit": { "optional": true },
+    "h3": { "optional": true },
+    "nuxt": { "optional": true },
+    "nitropack": { "optional": true }
+  },
   "devDependencies": {
+    "@nuxt/kit": "^3.17.5",
     "@types/node": "^22.18.0",
     "@types/proper-lockfile": "^4.1.4",
     "@types/sanitize-html": "^2.16.1",
+    "h3": "^1.15.4",
     "nuxt": "^4.4.6",
     "typescript": "^5.9.3",
     "nitropack": "^2.12.0"
