@@ -4,7 +4,7 @@ This is an independent third-party project maintained by Pirabyte. It is not an 
 
 Server-side eRecht24 integration for Nuxt 3 and 4. Provides German and English imprint and privacy policy HTML through `/api/legal/imprint` and `/api/legal/privacyPolicy`.
 
-Extracted from the Lornlight website integration. API keys stay on the server. HTML is sanitized before serving and persisted on disk so the last successful document remains available during API failures and across process restarts.
+API keys stay on the server. HTML is sanitized before serving and persisted on disk so the last successful document remains available during API failures and across process restarts.
 
 ## Installation
 
@@ -89,26 +89,3 @@ npm pack --dry-run
 ```
 
 The unit tests cover sanitization, language separation, disk persistence, upstream failures, retry limits, and concurrent processes. The integration test builds a Nuxt fixture and checks API responses and server-rendered legal content. CI runs that fixture on Nuxt 3 and 4. The package test installs the actual tarball in an isolated Node project and checks the server entrypoint without Nuxt or install scripts. Tests use synthetic documents and do not call the live eRecht24 API.
-
-## Releases
-
-The `publish.yml` workflow publishes stable `vX.Y.Z` tags from commits already merged into `main`. The tag must match `package.json`. It builds, tests, audits runtime dependencies, and checks the release tarball in a job with read-only permissions. A separate job publishes that tarball with OIDC and provenance, without installing project dependencies or executing package scripts. Release jobs use Node.js 24 and require npm 11.5.1 or newer.
-
-For the initial package creation, a maintainer may need to publish once locally with `npm publish --access public`. Then configure an npm trusted publisher in the package settings:
-
-- Organization: `pirabyte`
-- Repository: `erecht24-nuxt`
-- Workflow filename: `publish.yml`
-- Environment: leave empty
-- Allowed actions: enable direct publishing with `npm publish`
-
-No npm token is needed in GitHub secrets. Follow the [npm trusted publishing instructions](https://docs.npmjs.com/trusted-publishers/) to create the mapping. Configure repository rules to restrict release-tag creation to maintainers.
-
-For subsequent releases, update the version and lockfile in a reviewed pull request, merge it, and tag that exact merged commit:
-
-```sh
-git tag vX.Y.Z <merged-commit>
-git push origin vX.Y.Z
-```
-
-Verify the publish workflow and registry version before creating the GitHub release. Tags on an unmerged feature branch fail the release check.
